@@ -142,6 +142,10 @@ class supext():
         thread.daemon = True
         thread.start()
 
+    def endChecks(self):
+        self.connectors.stopRound()
+        self.logger.info('Round of checks finished')
+
     def runCheck(self, name, alert=False):
         result = self.checks.run(name)
         if self.alerting and not result['ok'] and alert:
@@ -159,6 +163,7 @@ class supext():
         # Run canary checks first
         failed_locations = []
         self.logger.info('Running canary checks')
+        self.connectors.startRound()
         for check in self.checks.getCanaries():
             result = self.runCheck(check['name'])
             if not result['ok']:
@@ -193,7 +198,11 @@ class supext():
             except Exception:
                 self.logger.error('Execution failed for check {0}'.format(name))
                 continue
-        self.logger.info('Round of checks finished')
+        if self.scheduler.empty() == True:
+            self.endChecks()
+        else:
+            # We have checks failing, so we wait for end of checks
+            self.scheduler.enter(self.time_retry, 3, self.endChecks, [])
 
     def loop(self):
         self.logger.info('Run new round of checks')

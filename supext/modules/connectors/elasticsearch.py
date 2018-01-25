@@ -8,6 +8,12 @@ class elasticsearch:
         self.es = Elasticsearch(config.get('hosts', ['localhost:443']))
         self.logger = logging.getLogger('supext')
 
+    def startRound(self):
+        pass
+
+    def stopRound(self):
+        pass
+
     def run(self, result, check):
         doc = {
             'name': check['name'],

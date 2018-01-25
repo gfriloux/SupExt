@@ -29,3 +29,11 @@ class connectors():
                 module.run(result, check)
             except Exception as e:
                 self.logger.error('Cannot add entry using {0} for check {1}: {2}'.format(name, check['name'], e))
+
+    def startRound(self):
+        for name, module, in self.modules.items():
+            module.startRound()
+
+    def stopRound(self):
+        for name, module, in self.modules.items():
+            module.stopRound()

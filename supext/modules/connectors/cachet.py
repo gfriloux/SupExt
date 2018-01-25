@@ -13,6 +13,12 @@ class cachet:
             self.certificate = config['certificate']
             self.key = config['key']
 
+    def startRound(self):
+        pass
+
+    def stopRound(self):
+        pass
+
     def getHeader(self):
         return {'X-Cachet-Token': self.token}
 
